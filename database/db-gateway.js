@@ -1,43 +1,40 @@
-const AWS = require("aws-sdk");
-AWS.config.update({ region: "us-east-1" });
-const docClient = new AWS.DynamoDB.DocumentClient();
-const { isObject, isEmptyObject, SuccessResponseModel, mergeObjects, throwErrorResponseModel } = require('ibar');
+const { mergeObjects, throwErrorResponseModel } = require('../index').utils;
+const { isObject, isEmptyObject } = require('../index').validations;
+const { SuccessResponseModel } = require('../index').models;
 
-const handler = async (docClient, ) => {
-  if (isEmptyObject(event))
-    throwErrorResponseModel(event, '"event" should not be an empty object.');
+const handler = async (docClient, method, tableName,
+  {
+    body,
+    path,
+    header,
+    queryString,
+    projectionExpression,
+    expressionAttributeNames,
+    keyConditionExpression,
+    expressionAttributeValues,
+    filterExpression
+  } = {}
+) => {
 
-  const body = event.body;
-  const pathParams = event.params.path;
-  const headerParams = event.params.header;
-  // const queryParams = event.params.queryString;
-  const projectionExpression = event.projectionExpression;
-  const expressionAttributeNames = event.expressionAttributeNames;
-  const filterExpression = event.filterExpression;
-
-  const method = event.method;
   if (!(method == 'get' || method == 'put' || method == 'delete' || method == 'scan' || method == 'query'))
-    throwErrorResponseModel(event, 'method attribute must be "get", "put", "delete", "query" or "scan".')
+    throwErrorResponseModel(method, 'method attribute must be "get", "put", "delete", "query" or "scan".')
 
-  const tableName = event.tableName;
   if (typeof tableName != 'string')
-    throwErrorResponseModel(event, 'tableName attribute must be a string.')
+    throwErrorResponseModel(tableName, 'tableName attribute must be a string.')
 
-  const key = pathParams;
+  const key = path;
   if ((method == 'get' || method == 'delete') && isEmptyObject(key))
-    throwErrorResponseModel(event, 'key should not be empty.')
+    throwErrorResponseModel(key, 'key should not be empty.')
 
-  const keyConditionExpression = event.keyConditionExpression;
   if (method == 'query' && !(typeof keyConditionExpression == 'string' && keyConditionExpression.length != 0))
-    throwErrorResponseModel(event, 'keyConditionExpression attribute must have at least one character in put methods.');
+    throwErrorResponseModel(keyConditionExpression, 'keyConditionExpression attribute must have at least one character in put methods.');
 
-  const expressionAttributeValues = event.expressionAttributeValues;
   if (method == 'query' && !isObject(expressionAttributeValues))
-    throwErrorResponseModel(event, 'expressionAttributeValues attribute must be an object in query methods.');
+    throwErrorResponseModel(expressionAttributeValues, 'expressionAttributeValues attribute must be an object in query methods.');
 
   let item;
   if (method == 'put')
-    item = await createItem(event);
+    item = await createItem(body, path);
 
   const dbParams = {
     TableName: tableName,
@@ -48,7 +45,7 @@ const handler = async (docClient, ) => {
     ExpressionAttributeValues: expressionAttributeValues,
     ExpressionAttributeNames: expressionAttributeNames,
     FilterExpression: filterExpression,
-    error: event.error
+    error: error
   }
 
   const result = await docClient[method](dbParams).promise();
@@ -68,25 +65,19 @@ const handler = async (docClient, ) => {
   });
 };
 
-async function createItem(event) {
+async function createItem(body, path) {
   let item = {};
-  for (let bodyKey in event.body)
-    item[bodyKey] = event.body[bodyKey];
+  for (let bodyKey in body)
+    item[bodyKey] = body[bodyKey];
 
-  for (let pathKey in event.params.path) 
-    item[pathKey] = event.params.path[pathKey];
+  for (let pathKey in path)
+    item[pathKey] = path[pathKey];
 
-  if (isEmptyObject(item)) 
-    throwErrorResponseModel(event, 'item should not be empty.')
+  if (isEmptyObject(item))
+    throwErrorResponseModel(item, 'item should not be empty.')
 
-  if (isEmptyObject(event.params.header)) 
-    throwErrorResponseModel(event, '"event.params.header" should not be an empty object.');
+  const userId = header.userId;
 
-  if (typeof event.params.header.userId != 'string') 
-    throwErrorResponseModel(event, '"event.params.header.userId" should be string.');
-
-  const userId = event.params.header.userId;
-  
   const actualItem = await getActualItem(event);
   const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);
   actualItem.historic = undefined;
@@ -102,15 +93,14 @@ async function createItem(event) {
   const mergedObject = mergeObjects(actualItem, item);
 
   return mergedObject;
-
 }
 
 
-async function getActualItem(event) {
+async function getActualItem(tableName, params) {
   let dbParams = {
-    tableName: event.tableName,
+    tableName: tableName,
     method: 'get',
-    params: event.params
+    params: params
   }
   const result = await handler(dbParams)
 

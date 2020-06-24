@@ -1,5 +1,17 @@
-const { ErrorResponseModel, SuccessResponseModel } = require('./index').models;
+const AWS = require("aws-sdk");
+AWS.config.update({ region: "us-east-1" });
+const docClient = new AWS.DynamoDB.DocumentClient();
 
-const error = new ErrorResponseModel('input', 'error');
-const s = new SuccessResponseModel({ item: 'item' })
-console.log(error, '\n', s)
+const { handler } = require('./database/db-gateway');
+
+const debugResult = require('./utils/debug-result');
+
+const debugMethod = handler(docClient, 'get', 'Users', {
+  body: {},
+  path: {
+    id: '1'
+  },
+  header: {},
+});
+
+debugResult(debugMethod)

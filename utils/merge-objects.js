@@ -1,7 +1,7 @@
-const { isObject } = require('../validations/is-object');
-const { ErrorResponseModel } = require('../models/error-response-model');
+const isObject = require('../validations/is-object');
+const ErrorResponseModel = require('../models/error-response-model');
 
-exports.mergeObjects = (actualObject, newObject) => {
+module.exports = function mergeObjects(actualObject, newObject) {
   if (!isObject(actualObject)) throw new ErrorResponseModel(actualObject, 'actualObject should be an object.', 400);
   if (!isObject(newObject)) throw new ErrorResponseModel(newObject, 'newObject should be an object.', 400); ;
 

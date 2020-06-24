@@ -1,5 +1,5 @@
-const { isObject } = require('./is-object');
+const isObject = require('./is-object');
 
-exports.isEmptyObject = (object) => {
+module.exports = function isEmptyObject(object) {
   return isObject(object) && Object.keys(object).length === 0;
 }
