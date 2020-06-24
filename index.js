@@ -13,3 +13,7 @@ exports.utils = {
   throwErrorResponseModel: require('./utils/throw-error-response-model')
 }
 
+exports.database = {
+  dbGateway: require('./database/db-gateway')
+}
+

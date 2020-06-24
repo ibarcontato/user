@@ -2,7 +2,7 @@ const { mergeObjects, throwErrorResponseModel } = require('../index').utils;
 const { isObject, isEmptyObject } = require('../index').validations;
 const { SuccessResponseModel } = require('../index').models;
 
-const handler = async (docClient, method, tableName,
+module.exports = async function dbGateway(docClient, method, tableName,
   {
     body,
     path,
@@ -14,7 +14,7 @@ const handler = async (docClient, method, tableName,
     expressionAttributeValues,
     filterExpression
   } = {}
-) => {
+)  {
 
   if (!(method == 'get' || method == 'put' || method == 'delete' || method == 'scan' || method == 'query'))
     throwErrorResponseModel(method, 'method attribute must be "get", "put", "delete", "query" or "scan".')
@@ -45,7 +45,7 @@ const handler = async (docClient, method, tableName,
     ExpressionAttributeValues: expressionAttributeValues,
     ExpressionAttributeNames: expressionAttributeNames,
     FilterExpression: filterExpression,
-    error: error
+    // error: error
   }
 
   const result = await docClient[method](dbParams).promise();
@@ -102,14 +102,8 @@ async function getActualItem(tableName, params) {
     method: 'get',
     params: params
   }
-  const result = await handler(dbParams)
+  const result = await dbGateway(dbParams)
 
   return result.Item == undefined ? {} : result.Item;
 }
-
-module.exports = { handler };
-
-
-
-
 
