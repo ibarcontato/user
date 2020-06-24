@@ -10,7 +10,8 @@ exports.validations = {
 
 exports.utils = {
   mergeObjects: require('./utils/merge-objects'),
-  throwErrorResponseModel: require('./utils/throw-error-response-model')
+  throwErrorResponseModel: require('./utils/throw-error-response-model'),
+  debugResult: require('./utils/debug-result')
 }
 
 exports.database = {
