@@ -2,7 +2,7 @@ const { mergeObjects, throwErrorResponseModel } = require('../index').utils;
 const { isObject, isEmptyObject } = require('../index').validations;
 const { SuccessResponseModel } = require('../index').models;
 
-module.exports = async function dbGateway(docClient, method, tableName,
+const dbGateway = async function dbGateway(docClient, method, tableName,
   {
     body,
     path,
@@ -14,7 +14,8 @@ module.exports = async function dbGateway(docClient, method, tableName,
     expressionAttributeValues,
     filterExpression
   } = {}
-)  {
+) {
+
 
   if (!(method == 'get' || method == 'put' || method == 'delete' || method == 'scan' || method == 'query'))
     throwErrorResponseModel(method, 'method attribute must be "get", "put", "delete", "query" or "scan".')
@@ -34,7 +35,7 @@ module.exports = async function dbGateway(docClient, method, tableName,
 
   let item;
   if (method == 'put')
-    item = await createItem(body, path);
+    item = await createItem(docClient, body, path, header, tableName);
 
   const dbParams = {
     TableName: tableName,
@@ -65,7 +66,7 @@ module.exports = async function dbGateway(docClient, method, tableName,
   });
 };
 
-async function createItem(body, path) {
+async function createItem(docClient, body, path, header, tableName) {
   let item = {};
   for (let bodyKey in body)
     item[bodyKey] = body[bodyKey];
@@ -78,7 +79,7 @@ async function createItem(body, path) {
 
   const userId = header.userId;
 
-  const actualItem = await getActualItem(event);
+  const actualItem = await getActualItem(docClient, tableName, path);
   const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);
   actualItem.historic = undefined;
   const newHistoricItem = {
@@ -96,14 +97,13 @@ async function createItem(body, path) {
 }
 
 
-async function getActualItem(tableName, params) {
-  let dbParams = {
-    tableName: tableName,
-    method: 'get',
-    params: params
-  }
-  const result = await dbGateway(dbParams)
+async function getActualItem(docClient, tableName, path) {
+  const result = await dbGateway(docClient, 'get', tableName, {
+    path: path
+  })
 
   return result.Item == undefined ? {} : result.Item;
 }
 
+
+module.exports = dbGateway 
