@@ -17,11 +17,6 @@ module.exports = async function debugResult(method) {
       |                        CATCH                        |
       =======================================================
     `)
-    try {
-      console.log(JSON.stringify(JSON.parse(result), null, 2), '\n\n')
-    } catch(_) {
-      throw result;
-    }
+    console.log(JSON.stringify(JSON.parse(result), null, 2), '\n\n')
   };
 }
-  

@@ -6,6 +6,8 @@ exports.models = {
 exports.validations = {
   isObject: require('./validations/is-object'),
   isEmptyObject: require('./validations/is-empty-object'),
+  isEmailValid: require('./validations/is-email-valid'),
+  
 }
 
 exports.utils = {
