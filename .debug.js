@@ -13,4 +13,4 @@ const debugMethod = dbGateway(docClient, 'get', 'Users', {
   header: {},
 });
 
-debugResult(debugMethod)
+debugResult({})

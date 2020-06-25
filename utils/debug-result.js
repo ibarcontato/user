@@ -1,6 +1,4 @@
 module.exports = async function debugResult(method) {
-  method.then(_then).catch(_catch)
-
   function _then(result) {
     console.log(` 
       =======================================================
@@ -19,4 +17,15 @@ module.exports = async function debugResult(method) {
     `)
     console.log(JSON.stringify(JSON.parse(result), null, 2), '\n\n')
   };
+
+  try {
+    method.then(_then).catch(_catch)
+  } catch (_) {
+    console.log(` 
+      =======================================================
+      |                        'SYNC'                       |
+      =======================================================
+    `);
+    console.log(JSON.stringify(method, null, 2))
+  }
 }
