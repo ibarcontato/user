@@ -19,6 +19,7 @@ module.exports = async function debugResult(method) {
   };
 
   try {
+    setTimeout(() => {}, 1000);
     method.then(_then).catch(_catch)
   } catch (_) {
     console.log(` 
