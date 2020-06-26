@@ -10,6 +10,7 @@ module.exports = async function debugResult(method) {
 
 
   function _catch(result) {
+    setTimeout(() => { }, 1000);
     console.log(`
       =======================================================
       |                        CATCH                        |
@@ -19,7 +20,6 @@ module.exports = async function debugResult(method) {
   };
 
   try {
-    setTimeout(() => {}, 1000);
     method.then(_then).catch(_catch)
   } catch (_) {
     console.log(` 
