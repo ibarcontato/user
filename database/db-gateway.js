@@ -102,7 +102,7 @@ async function getActualItem(docClient, tableName, path) {
     path: path
   })
 
-  return result.Item == undefined ? {} : result.Item;
+  return result.item == undefined ? {} : result.item;
 }
 
 
