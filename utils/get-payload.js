@@ -1,4 +1,4 @@
-const { ErrorResponseModel } = require('../models/error-response-model');
+const  ErrorResponseModel  = require('../models/error-response-model');
 
 exports.getPayload = (result) => {
   if (result.Payload && typeof result.Payload == 'string') {

@@ -149,17 +149,17 @@ describe('createInvokeParams = (functionName, method, tableName, stage = "dev", 
       const inputData = { functionName, method, tableName, stage, dbParams };
       if (typeof inputData.dbParams == 'function') inputData.dbParams = undefined;
 
-      const expected = {
+      const expected = JSON.stringify({
         inputData: typeof inputData == 'function' ? undefined : inputData,
         errorMessage: '"dbParams" should be an object or undefined.',
         statusCode: 400,
-      };
+      });
 
       try { createInvokeParams(functionName, method, tableName, stage, dbParams) } catch (received) {
-        expect(JSON.parse(received)).toEqual(expected)
+        expect(JSON.parse(received)).toEqual(JSON.parse(expected))
       }
-    }
+    } 
   })
-
+  
 })
 

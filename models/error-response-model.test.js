@@ -1,4 +1,4 @@
-const { ErrorResponseModel } = require('./error-response-model');
+const  ErrorResponseModel  = require('./error-response-model');
 
 describe('constructor(inputData, errorMessage, statusCode, version)', () => {
   test('should return a new model when request is valid', async () => {

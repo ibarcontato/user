@@ -1,5 +1,5 @@
-const { mergeObjects } = require('./merge-objects');
-const { ErrorResponseModel } = require('../models/error-response-model');
+const  mergeObjects  = require('./merge-objects');
+const  ErrorResponseModel  = require('../models/error-response-model');
 
 describe('mergeObjects = (actualObject, newObject)', () => {
   test('should return success object', async () => {

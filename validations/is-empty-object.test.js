@@ -1,4 +1,4 @@
-const { isEmptyObject } = require('./is-empty-object');
+const  isEmptyObject  = require('./is-empty-object');
 
 describe('isEmptyObject = (object)', () => {
   test('should return true when object is an empty object', async () => {

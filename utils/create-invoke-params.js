@@ -1,5 +1,5 @@
-const { ErrorResponseModel } = require('../models/error-response-model')
-const { isObject } = require('../validations/is-object');
+const ErrorResponseModel  = require('../models/error-response-model')
+const  isObject  = require('../validations/is-object');
 
 exports.createInvokeParams = (functionName, method, tableName, stage = 'dev', dbParams = {}) => {
   const inputData = { functionName, method, tableName, stage, dbParams };

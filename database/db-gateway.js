@@ -83,8 +83,8 @@ async function createItem(docClient, body, path, header, tableName) {
   const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);                               
   actualItem.historic = undefined;
   const newHistoricItem = {
-    datetime: `${new Date()}`,
-    userId: userId,
+    changedWhen: `${new Date()}`,
+    changedBy: userId,
     item: Object.assign({}, actualItem)
   }
 

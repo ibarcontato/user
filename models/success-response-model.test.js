@@ -1,4 +1,4 @@
-const { SuccessResponseModel } = require('./success-response-model');
+const  SuccessResponseModel = require('./success-response-model');
 
 describe('constructor(payload, statusCode)', () => {
   test('should return a new model when request is valid', async () => {

@@ -1,5 +1,5 @@
-const { throwErrorResponseModel } = require('./throw-error-response-model');
-const { ErrorResponseModel } = require('../models/error-response-model');
+const  throwErrorResponseModel = require('./throw-error-response-model');
+const  ErrorResponseModel  = require('../models/error-response-model');
 
 describe('throwErrorResponseModel = (inputData, errorMessage, statusCode = 400)', () => {
   test('should return success object', async () => {

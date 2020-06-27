@@ -7,8 +7,8 @@ module.exports = function mergeObjects(actualObject, newObject) {
 
   for (newObjectKey in newObject) {
     if (isObject(actualObject[newObjectKey]))
-      actualObject[newObjectKey] = this.mergeObjects(actualObject[newObjectKey], newObject[newObjectKey])
+      actualObject[newObjectKey] = mergeObjects(actualObject[newObjectKey], newObject[newObjectKey])
     else actualObject[newObjectKey] = newObject[newObjectKey]
   }
   return actualObject;
-}  
+}   
