@@ -8,6 +8,7 @@ exports.validations = {
   isEmptyObject: require('./validations/is-empty-object'),
   isEmailValid: require('./validations/is-email-valid'),
   isVerificationCodeValid: require('./validations/is-verification-code-valid'),
+  isClassOf: require('./validations/is-class-of'),
 }
 
 exports.utils = {
