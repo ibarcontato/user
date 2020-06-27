@@ -80,7 +80,7 @@ async function createItem(docClient, body, path, header, tableName) {
   const userId = header.userId;
 
   const actualItem = await getActualItem(docClient, tableName, path);
-  const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);
+  const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);                               
   actualItem.historic = undefined;
   const newHistoricItem = {
     datetime: `${new Date()}`,
