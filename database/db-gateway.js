@@ -3,18 +3,8 @@ const { isObject, isEmptyObject } = require('../index').validations;
 const { SuccessResponseModel } = require('../index').models;
 
 const dbGateway = async function dbGateway(docClient, method, tableName,
-  {
-    body,
-    path,
-    header,
-    queryString,
-    projectionExpression,
-    expressionAttributeNames,
-    keyConditionExpression,
-    expressionAttributeValues,
-    filterExpression
-  } = {}
-) {
+  { body, path, header, queryString, projectionExpression, expressionAttributeNames,
+    keyConditionExpression, expressionAttributeValues, filterExpression } = {}) {
 
 
   if (!(method == 'get' || method == 'put' || method == 'delete' || method == 'scan' || method == 'query'))
@@ -80,7 +70,7 @@ async function createItem(docClient, body, path, header, tableName) {
   const userId = header.userId;
 
   const actualItem = await getActualItem(docClient, tableName, path);
-  const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);                               
+  const actualHistoricList = actualItem.historic == undefined ? [] : Object.assign([], actualItem.historic);
   actualItem.historic = undefined;
   const newHistoricItem = {
     changedWhen: `${new Date()}`,
